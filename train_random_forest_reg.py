@@ -48,9 +48,10 @@ def plot_graphs(x_data, y_data, x_label, y_label, title):
 
 
 @click.command()
-@click.option("--params--", type=dict, help="Dictionary with parameters for Random Forest Regressor")
+@click.option("--max_depth--", type=int, help="Maximal depth of regressor tree")
+@click.option("--n_estimators--", type=int, help="Number of estimators in Random Forest")
 @click.option("--r-name", default="Lab-2:RF Petrol Regression Experiment - Projects", type=str, help="Name of the MLflow run")    
-def train_random_forest_reg(params, r_name):
+def train_random_forest_reg(n_estimators, max_depth, r_name):
     """
     This method trains, computes metrics, and logs all metrics, parameters,
     and artifacts for the current run using the MLflow APIs
@@ -68,7 +69,7 @@ def train_random_forest_reg(params, r_name):
     # <------------------- MLflow ------------------->
     with mlflow.start_run(run_name=r_name) as run:
         # define the random forest regressor model
-        rf = RandomForestRegressor(**params)
+        rf = RandomForestRegressor(n_estimators=n_estimators, max_depth=max_depth)
 
         # get current run and experiment id
         runID = run.info.run_uuid
@@ -135,7 +136,7 @@ def train_random_forest_reg(params, r_name):
         print('Root Mean Squared Error:', rmse)
         print('R2                     :', r2)
         
-        return (experimentID, runID)
+        # return (experimentID, runID)
 
 
 if __name__ == "__main__":
