@@ -48,8 +48,9 @@ def plot_graphs(x_data, y_data, x_label, y_label, title):
 
 
 @click.command()
-@click.option("--params", type=dict, help="Dictionary with parameters for Random Forest Regressor")
-def train_random_forest_reg(params):
+@click.option("--params", type=dict, default={'n_estimators': 50, 'max_depth': 6}, help="Dictionary with parameters for Random Forest Regressor")
+@click.option("--r-name", default="Lab-2:RF Petrol Regression Experiment - Projects", type=str, help="Name of the MLflow run")   
+def train_random_forest_reg(params, r_name="Lab-1:RF Petrol Regression Experiment"):
     """
     This method trains, computes metrics, and logs all metrics, parameters,
     and artifacts for the current run using the MLflow APIs
@@ -57,15 +58,14 @@ def train_random_forest_reg(params):
     :param r_name: Name of the run as logged by MLflow
     :return: MLflow Tuple (ExperimentID, runID)
     """
-    rmse = []
-    estimators = []
+    
 
         # Read the wine-quality csv file (make sure you're running this from the root of MLflow!)
     petrol_cons = os.path.join(os.path.dirname(os.path.abspath(__file__)), "petrol_consumption.csv")
     df = pd.read_csv(petrol_cons)
 
     # <------------------- MLflow ------------------->
-    with mlflow.start_run() as run:
+    with mlflow.start_run(run_name=r_name) as run:
         # define the random forest regressor model
         rf = RandomForestRegressor(**params)
 
@@ -94,8 +94,9 @@ def train_random_forest_reg(params):
         y_pred = rf.predict(X_test)
 
         # Log model and params using the MLflow APIs
+        rf.params = rf.get_params()
         mlflow.sklearn.log_model(rf, "random-forest-reg-model")
-        mlflow.log_params(rf._params)
+        mlflow.log_params(rf.params)
 
         # compute  regression evaluation metrics 
         mae = metrics.mean_absolute_error(y_test, y_pred)
@@ -110,11 +111,13 @@ def train_random_forest_reg(params):
         mlflow.log_metric("r2", r2)
 
         # update global class instance variable with values
-        rmse.append(rmse)
-        estimators.append(rf.params["n_estimators"])
+        rf.rmse = []
+        rf.estimators = []
+        rf.rmse.append(rmse)
+        rf.estimators.append(rf.params["n_estimators"])
 
         # plot graphs and save as artifacts
-        (fig, ax) = plot_graphs(estimators, rmse, "Random Forest Estimators", "Root Mean Square", "Root Mean Square vs Estimators")
+        (fig, ax) = plot_graphs(rf.estimators, rmse, "Random Forest Estimators", "Root Mean Square", "Root Mean Square vs Estimators")
 
         # create temporary artifact file name and log artifact
         temp_file_name = get_temporary_directory_path("rmse_estimators-", ".png")
@@ -134,7 +137,7 @@ def train_random_forest_reg(params):
         print('Root Mean Squared Error:', rmse)
         print('R2                     :', r2)
         
-        # return (experimentID, runID)
+        return (experimentID, runID)
 
 
 if __name__ == "__main__":
