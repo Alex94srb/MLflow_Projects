@@ -49,8 +49,7 @@ def plot_graphs(x_data, y_data, x_label, y_label, title):
 
 @click.command()
 @click.option("--params--", type=dict, help="Dictionary with parameters for Random Forest Regressor")
-@click.option("--r-name", default="Lab-2:RF Petrol Regression Experiment - Projects", type=str, help="Name of the MLflow run")    
-def train_random_forest_reg(params, r_name):
+def train_random_forest_reg(params):
     """
     This method trains, computes metrics, and logs all metrics, parameters,
     and artifacts for the current run using the MLflow APIs
@@ -115,10 +114,10 @@ def train_random_forest_reg(params, r_name):
         estimators.append(rf.params["n_estimators"])
 
         # plot graphs and save as artifacts
-        (fig, ax) = Utils.plot_graphs(estimators, rmse, "Random Forest Estimators", "Root Mean Square", "Root Mean Square vs Estimators")
+        (fig, ax) = plot_graphs(estimators, rmse, "Random Forest Estimators", "Root Mean Square", "Root Mean Square vs Estimators")
 
         # create temporary artifact file name and log artifact
-        temp_file_name = Utils.get_temporary_directory_path("rmse_estimators-", ".png")
+        temp_file_name = get_temporary_directory_path("rmse_estimators-", ".png")
         temp_name = temp_file_name.name
         try:
             fig.savefig(temp_name)
@@ -135,7 +134,6 @@ def train_random_forest_reg(params, r_name):
         print('Root Mean Squared Error:', rmse)
         print('R2                     :', r2)
         
-        return (experimentID, runID)
 
 
 if __name__ == "__name__":
