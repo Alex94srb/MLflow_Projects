@@ -6,4 +6,5 @@ entry_points:
     main:
         parameters:
             params: dict
-        command: "python train_random_forest_reg.py {params}"
+            r_name: {type: str, default: "Lab-2:RF Petrol Regression Experiment - Projects"}
+        command: "python train_random_forest_reg.py {params} {r_name}"
