@@ -49,7 +49,8 @@ def plot_graphs(x_data, y_data, x_label, y_label, title):
 
 @click.command()
 @click.option("--params--", type=dict, help="Dictionary with parameters for Random Forest Regressor")
-def train_random_forest_reg(params):
+@click.option("--r-name", default="Lab-2:RF Petrol Regression Experiment - Projects", type=str, help="Name of the MLflow run")    
+def train_random_forest_reg(params, r_name):
     """
     This method trains, computes metrics, and logs all metrics, parameters,
     and artifacts for the current run using the MLflow APIs
@@ -65,7 +66,7 @@ def train_random_forest_reg(params):
     df = pd.read_csv(petrol_cons)
 
     # <------------------- MLflow ------------------->
-    with mlflow.start_run() as run:
+    with mlflow.start_run(run_name=r_name) as run:
         # define the random forest regressor model
         rf = RandomForestRegressor(**params)
 
@@ -137,5 +138,5 @@ def train_random_forest_reg(params):
         return (experimentID, runID)
 
 
-if __name__ == "__name__":
+if __name__ == "__main__":
     train_random_forest_reg()
