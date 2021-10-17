@@ -7,4 +7,4 @@ entry_points:
     parameters:
       alpha: float
       l1_ratio: {type: float, default: 0.1}
-    command: "python train.py {alpha} {l1_ratio}"
+    command: "python train_random_forest_reg.py {alpha} {l1_ratio}"
