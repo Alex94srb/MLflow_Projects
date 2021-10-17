@@ -57,7 +57,6 @@ def train_random_forest_reg(params):
     This method trains, computes metrics, and logs all metrics, parameters,
     and artifacts for the current run using the MLflow APIs
     :param df: pandas dataFrame
-    :param r_name: Name of the run as logged by MLflow
     :return: MLflow Tuple (ExperimentID, runID)
     """
     warnings.filterwarnings("ignore")
