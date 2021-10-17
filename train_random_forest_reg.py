@@ -1,6 +1,8 @@
 import os
 import tempfile
 import click
+import warnings
+import sys
 
 import numpy as np
 import mlflow.sklearn
@@ -47,10 +49,10 @@ def plot_graphs(x_data, y_data, x_label, y_label, title):
     return (fig, ax)
 
 
-@click.command()
-@click.option("--params", type=dict, default={'n_estimators': 50, 'max_depth': 6}, help="Dictionary with parameters for Random Forest Regressor")
+# @click.command()
+# @click.option("--params", type=dict, default={'n_estimators': 50, 'max_depth': 6}, help="Dictionary with parameters for Random Forest Regressor")
 # @click.option("--r-name", default="Lab-2:RF Petrol Regression Experiment - Projects", type=str, help="Name of the MLflow run")   
-def train_random_forest_reg(params, r_name="Lab-1:RF Petrol Regression Experiment"):
+def train_random_forest_reg(params):
     """
     This method trains, computes metrics, and logs all metrics, parameters,
     and artifacts for the current run using the MLflow APIs
@@ -58,6 +60,7 @@ def train_random_forest_reg(params, r_name="Lab-1:RF Petrol Regression Experimen
     :param r_name: Name of the run as logged by MLflow
     :return: MLflow Tuple (ExperimentID, runID)
     """
+    warnings.filterwarnings("ignore")
     
 
         # Read the wine-quality csv file (make sure you're running this from the root of MLflow!)
@@ -141,4 +144,6 @@ def train_random_forest_reg(params, r_name="Lab-1:RF Petrol Regression Experimen
 
 
 if __name__ == "__main__":
-    train_random_forest_reg()
+    params = dict(sys.argv[1]) if len(sys.sys.argv) > 1 else {'n_estimators': 50, 'max_depth': 6}
+
+    train_random_forest_reg(params=params)
