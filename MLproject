@@ -5,6 +5,5 @@ conda_env: conda.yaml
 entry_points:
     main:
         parameters:
-            params: dict
-            # r_name: {type: str, default: "Lab-2:RF Petrol Regression Experiment - Projects"}
-        command: "python train_random_forest_reg.py {params}"
+            n_estimators: int
+        command: "python train_random_forest_reg.py {n_estimators}"

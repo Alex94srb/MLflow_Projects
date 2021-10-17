@@ -64,7 +64,7 @@ if __name__ == "__main__":
     """
     warnings.filterwarnings("ignore")
     
-    params = dict(sys.argv[1]) if len(sys.argv) > 1 else {'n_estimators': 50, 'max_depth': 6}
+    n_estimators = int(sys.argv[1]) if len(sys.argv) > 1 else 100
 
 
         # Read the wine-quality csv file (make sure you're running this from the root of MLflow!)
@@ -74,7 +74,7 @@ if __name__ == "__main__":
     # <------------------- MLflow ------------------->
     with mlflow.start_run() as run:
         # define the random forest regressor model
-        rf = RandomForestRegressor(**params)
+        rf = RandomForestRegressor(n_estimators=n_estimators)
 
         # get current run and experiment id
         runID = run.info.run_uuid
