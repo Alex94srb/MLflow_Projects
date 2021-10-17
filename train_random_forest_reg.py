@@ -52,7 +52,10 @@ def plot_graphs(x_data, y_data, x_label, y_label, title):
 # @click.command()
 # @click.option("--params", type=dict, default={'n_estimators': 50, 'max_depth': 6}, help="Dictionary with parameters for Random Forest Regressor")
 # @click.option("--r-name", default="Lab-2:RF Petrol Regression Experiment - Projects", type=str, help="Name of the MLflow run")   
-def train_random_forest_reg(params):
+# def train_random_forest_reg(params):
+
+if __name__ == "__main__":
+
     """
     This method trains, computes metrics, and logs all metrics, parameters,
     and artifacts for the current run using the MLflow APIs
@@ -61,6 +64,8 @@ def train_random_forest_reg(params):
     """
     warnings.filterwarnings("ignore")
     
+    params = dict(sys.argv[1]) if len(sys.argv) > 1 else {'n_estimators': 50, 'max_depth': 6}
+
 
         # Read the wine-quality csv file (make sure you're running this from the root of MLflow!)
     petrol_cons = os.path.join(os.path.dirname(os.path.abspath(__file__)), "petrol_consumption.csv")
@@ -139,10 +144,10 @@ def train_random_forest_reg(params):
         print('Root Mean Squared Error:', rmse)
         print('R2                     :', r2)
         
-        return (experimentID, runID)
+        # return (experimentID, runID)
 
 
-if __name__ == "__main__":
-    params = dict(sys.argv[1]) if len(sys.sys.argv) > 1 else {'n_estimators': 50, 'max_depth': 6}
+# if __name__ == "__main__":
+#     params = dict(sys.argv[1]) if len(sys.sys.argv) > 1 else {'n_estimators': 50, 'max_depth': 6}
 
-    train_random_forest_reg(params=params)
+#     train_random_forest_reg(params=params)
