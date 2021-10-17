@@ -1,9 +1,10 @@
-name: MLflow Projects module tutorial
+name: tutorial
 
 conda_env: conda.yaml
 
 entry_points:
-    main:
-        parameters:
-            n_estimators: int
-        command: "python train_random_forest_reg.py {n_estimators}"
+  main:
+    parameters:
+      alpha: float
+      l1_ratio: {type: float, default: 0.1}
+    command: "python train.py {alpha} {l1_ratio}"
